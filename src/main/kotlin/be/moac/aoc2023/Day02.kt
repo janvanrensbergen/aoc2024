@@ -19,10 +19,12 @@ object Day02 {
             .filter { it.possible() }
             .sumOf { it.id }
 
-    infix fun partTwo(input: List<String>): Long = 0L
+    infix fun partTwo(input: List<String>): Long =
+        input.map { it.parse() }
+            .sumOf { it.power() }
 
 
-    fun String.parse() : Game {
+    fun String.parse(): Game {
         val (game, rounds) = this.split(":")
         return Game(game.removePrefix("Game ").toInt(), rounds.split(";").map { it.parseRound() })
     }
@@ -43,6 +45,12 @@ object Day02 {
 
         fun possible(): Boolean =
             rounds.none { it.greens > 13 || it.reds > 12 || it.blues > 14 }
+
+        fun power(): Long =
+            rounds.maxOf { it.blues.toLong() } *
+            rounds.maxOf { it.greens.toLong() } *
+            rounds.maxOf { it.reds.toLong() }
     }
+
     data class Round(val greens: Int = 0, val reds: Int = 0, val blues: Int = 0)
 }
