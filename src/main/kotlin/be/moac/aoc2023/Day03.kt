@@ -8,7 +8,7 @@ fun main() {
     val input: List<String> = "/day03_input.txt".readLines { it }
 
     println("Part one: ${timed { Day03 partOne input }}")
-    println("Part two: ${timed { Day03 partTwo input }}")
+    println("Part two: ${timed(1) { Day03 partTwo input }}")
 }
 
 object Day03 {
@@ -19,7 +19,13 @@ object Day03 {
             .filterIsInstance<EnginePart>()
             .sumOf { it.number }
 
-    infix fun partTwo(input: List<String>): Long = 0L
+    infix fun partTwo(input: List<String>): Long =
+        input.parse()
+            .findGears()
+            .sumOf { gear ->
+                val (first, second) = gear.parts.map { it.number.toLong() }
+                first * second
+            }
 
     fun List<String>.parse(): List<Something> =
         this.flatMapIndexed { y, line ->
@@ -55,6 +61,19 @@ object Day03 {
         this.filterIsInstance<Symbol>()
             .any { positions.contains(it.position) }
 
+    fun List<Something>.findGears(): List<Gear> =
+        this.filterIsInstance<Symbol>()
+            .filter { it.value == '*' }
+            .map { Gear(this.findPartsAt(it.adjacentPoints)) }
+            .filter { it.parts.size == 2 }
+
+    private fun List<Something>.findPartsAt(positions: List<Pair<Int, Int>>): List<EnginePart> =
+        this.filterIsInstance<EnginePart>()
+            .filter { it.positions.any { p -> positions.contains(p) } }
+
+
+    data class Gear(val parts: List<EnginePart>)
+
     sealed interface Something {
         data class EnginePart(val number: Int, val positions: List<Pair<Int, Int>>) : Something {
 
@@ -74,7 +93,18 @@ object Day03 {
                 )
         }
 
-        data class Symbol(val value: Char, val position: Pair<Int, Int>) : Something
+        data class Symbol(val value: Char, val position: Pair<Int, Int>) : Something {
+
+            private val x get() = position.first
+            private val y get() = position.second
+
+            val adjacentPoints: List<Pair<Int, Int>> = listOf(
+                x - 1 to y - 1, x to y - 1, x + 1 to y - 1,
+                x - 1 to y,                 x + 1 to y,
+                x - 1 to y + 1, x to y + 1, x + 1 to y + 1,
+            )
+
+        }
 
         data object Point : Something
     }

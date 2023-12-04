@@ -3,6 +3,7 @@ package be.moac.aoc2023
 import be.moac.aoc2023.Day03.Something.EnginePart
 import be.moac.aoc2023.Day03.Something.Symbol
 import be.moac.aoc2023.Day03.filterParts
+import be.moac.aoc2023.Day03.findGears
 import be.moac.aoc2023.Day03.parse
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
@@ -57,7 +58,7 @@ class Day03Test {
     }
 
     @Test
-    fun `that the som of the engine parts is correct`() {
+    fun `that the sum of the engine parts is correct`() {
         assertThat(Day03.partOne(listOf(
             "467..114..",
             "...*......",
@@ -70,6 +71,41 @@ class Day03Test {
             "...${'$'}.*....",
             ".664.598..",
         ))).isEqualTo(4361)
+    }
+
+    @Test
+    fun `that gears can be found`() {
+        assertThat(listOf(
+            "467..114..",
+            "...*......",
+            "..35..633.",
+            "......#...",
+            "617*......",
+            ".....+.58.",
+            "..592.....",
+            "......755.",
+            "...${'$'}.*....",
+            ".664.598..",
+        ).parse().findGears().map { it.parts.map { p -> p.number } })
+            .containsExactly(listOf(467, 35), listOf(755, 598))
+    }
+
+    @Test
+    fun `part two`() {
+        assertThat(Day03.partTwo(listOf(
+            "467..114..",
+            "...*......",
+            "..35..633.",
+            "......#...",
+            "617*......",
+            ".....+.58.",
+            "..592.....",
+            "......755.",
+            "...${'$'}.*....",
+            ".664.598..",
+        ))).isEqualTo(467835L)
+
+
     }
 }
 
