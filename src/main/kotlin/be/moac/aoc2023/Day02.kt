@@ -1,7 +1,5 @@
 package be.moac.aoc2023
 
-import be.moac.aoc2023.Day01.first
-import com.sun.org.apache.xpath.internal.operations.Bool
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
