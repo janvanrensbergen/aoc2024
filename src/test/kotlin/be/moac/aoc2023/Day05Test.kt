@@ -2,7 +2,7 @@ package be.moac.aoc2023
 
 import be.moac.aoc2023.Day05.Location.Found
 import be.moac.aoc2023.Day05.MappingRange
-import be.moac.aoc2023.Day05.Seed
+import be.moac.aoc2023.Day05.SingleSeed
 import be.moac.aoc2023.Day05.parse
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
@@ -56,10 +56,10 @@ class Day05Test {
         val result = input.lines().parse()
         assertThat(result).isInstanceOf(Day05.Almanac::class.java)
         assertThat(result.seeds).containsExactly(
-            Seed(79),
-            Seed(14),
-            Seed(55),
-            Seed(13)
+            SingleSeed(79),
+            SingleSeed(14),
+            SingleSeed(55),
+            SingleSeed(13)
         )
     }
 
@@ -95,10 +95,10 @@ class Day05Test {
         val almanac = input.lines().parse()
 
         assertSoftly {
-            it.assertThat(almanac.findLocation("seed", 79)).isEqualTo(Found(82))
-            it.assertThat(almanac.findLocation("seed", 14)).isEqualTo(Found(43))
-            it.assertThat(almanac.findLocation("seed", 55)).isEqualTo(Found(86))
-            it.assertThat(almanac.findLocation("seed", 13)).isEqualTo(Found(35))
+            it.assertThat(almanac.findLocation("seed", 79)).isEqualTo(82)
+            it.assertThat(almanac.findLocation("seed", 14)).isEqualTo(43)
+            it.assertThat(almanac.findLocation("seed", 55)).isEqualTo(86)
+            it.assertThat(almanac.findLocation("seed", 13)).isEqualTo(35)
         }
 
     }
@@ -119,7 +119,11 @@ class Day05Test {
 
     @Test
     fun `part one must return the lowest location`() {
-
         assertThat(Day05.partOne(input.lines())).isEqualTo(35)
+    }
+
+    @Test
+    fun `part two must also return the lowest location`() {
+        assertThat(Day05.partTwo(input.lines())).isEqualTo(46)
     }
 }
