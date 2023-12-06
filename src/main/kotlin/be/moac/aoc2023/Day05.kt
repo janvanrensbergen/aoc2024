@@ -21,7 +21,7 @@ object Day05 {
         input.parse().findLowestPartTwo()
 
 
-    fun List<String>.parse(parseSeeds: List<String>.() -> List<SingleSeed> = { this.first().parseSeeds() }): Almanac =
+    fun List<String>.parse(): Almanac =
         Almanac(
             seeds = this.first().parseSeeds(),
             rangeSeeds = this.first().parseSeedsPartTwo(),
@@ -116,7 +116,7 @@ object Day05 {
 
     sealed interface Location {
 
-        operator fun compareTo(result: Location): Int
+        operator fun compareTo(other: Location): Int
 
         data class Found(val value: Long) : Location {
             override operator fun compareTo(other: Location): Int =
