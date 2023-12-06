@@ -50,8 +50,8 @@ private data class Timed<T>(val min: Duration, val max: Duration, val total: Arr
 
 fun <T> T.print(map: T.() -> String = { this.toString() } ): T = this.also { println(this.map()) }
 
-private val numberSpacesRegex = "\\b\\d+\\b".toRegex()
-fun String.asIntList(prefix: String = ""): List<Int> =
+private val numberSpacesRegex = "\\d+".toRegex()
+fun <T> String.extractNumbers(prefix: String = "", map: (String) -> T ): List<T> =
     numberSpacesRegex.findAll(this.removePrefix(prefix))
-        .map { it.value.trim().toInt() }
+        .map { map(it.value.trim()) }
         .toList()
