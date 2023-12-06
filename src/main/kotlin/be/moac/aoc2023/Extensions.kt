@@ -1,8 +1,11 @@
 package be.moac.aoc2023
 
 import java.io.File
-import kotlin.time.*
+import kotlin.time.Duration
 import kotlin.time.DurationUnit.MILLISECONDS
+import kotlin.time.ExperimentalTime
+import kotlin.time.TimedValue
+import kotlin.time.measureTimedValue
 
 fun String.readResource(): String = object {}.javaClass.getResource(this)?.readText() ?: ""
 fun <R> String.readLines(map: (String) -> R = { i -> i as R }): List<R> = File(object {}.javaClass.getResource(this)!!.file)
@@ -46,3 +49,9 @@ private data class Timed<T>(val min: Duration, val max: Duration, val total: Arr
 }
 
 fun <T> T.print(map: T.() -> String = { this.toString() } ): T = this.also { println(this.map()) }
+
+private val numberSpacesRegex = "\\b\\d+\\b".toRegex()
+fun String.asIntList(prefix: String = ""): List<Int> =
+    numberSpacesRegex.findAll(this.removePrefix(prefix))
+        .map { it.value.trim().toInt() }
+        .toList()

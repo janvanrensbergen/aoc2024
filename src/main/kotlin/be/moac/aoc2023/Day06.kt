@@ -12,9 +12,26 @@ fun main() {
 
 object Day06 {
 
-    infix fun partOne(input: List<String>): Long = 8
+    infix fun partOne(input: List<String>): Int =
+        input.parse()
+            .map { it.amountToBreakRecord() }
+            .fold(1) {acc, n -> acc * n}
 
 
-    infix fun partTwo(input: List<String>): Long = 0
+    infix fun partTwo(input: List<String>): Int = 0
 
+    fun List<String>.parse(): List<Race> =
+        this.first().asIntList("Time:")
+            .zip(this.last().asIntList("Distance:"))
+            { time, distance -> Race(time, distance) }
+
+    data class Race(val time: Int, val distance: Int) {
+
+        fun play(hold: Int): Int = (time - hold) * hold
+
+        fun amountToBreakRecord(): Int =
+            (1 until time)
+                .map { play(it) }
+                .count { it > distance }
+    }
 }
