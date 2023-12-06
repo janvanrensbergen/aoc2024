@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package be.moac.aoc2023
 
 import java.io.File
@@ -51,7 +53,7 @@ private data class Timed<T>(val min: Duration, val max: Duration, val total: Arr
 fun <T> T.print(map: T.() -> String = { this.toString() } ): T = this.also { println(this.map()) }
 
 private val numberSpacesRegex = "\\d+".toRegex()
-fun <T> String.extractNumbers(prefix: String = "", map: (String) -> T ): List<T> =
+fun <T> String.extractNumbers(prefix: String = "", map: (String) -> T = {it.toInt() as T }): List<T> =
     numberSpacesRegex.findAll(this.removePrefix(prefix))
         .map { map(it.value.trim()) }
         .toList()
