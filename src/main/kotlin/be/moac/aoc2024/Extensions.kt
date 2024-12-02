@@ -1,6 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package be.moac.aoc2023
+package be.moac.aoc2024
 
 import java.io.File
 import kotlin.time.Duration
