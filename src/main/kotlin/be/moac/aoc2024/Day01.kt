@@ -7,7 +7,7 @@ fun main() {
     val input: List<String> = "/day01_input.txt".readLines { it }
 
     println("Part one: ${timed(1) { Day01 partOne input }}")
-//    println("Part two: ${timed { Day01 partTwo input }}")
+    println("Part two: ${timed { Day01 partTwo input }}")
 }
 
 object Day01 {
@@ -17,7 +17,10 @@ object Day01 {
             if(it.second > it.first) it.second - it.first else it.first - it.second
         }
 
-    infix fun partTwo(input: List<String>): Long = 0L
+    infix fun partTwo(input: List<String>): Long {
+        val (first, second) = input.parse().unzip()
+        return first.sumOf { it * second.count { foo -> foo == it } }
+    }
 
     private fun List<String>.parse(): List<Pair<Long, Long>> =
         this.filterNot { it.isBlank() }
