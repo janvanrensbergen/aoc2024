@@ -5,7 +5,7 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
 fun main() {
-    val input: List<String> = "/day02_input.txt".readLines { it }
+    val input: List<String> = "/day02_input.txt".readLines()
 
     println("Part one: ${timed { Day02 partOne input }}")
     println("Part two: ${timed { Day02 partTwo input }}")
@@ -47,7 +47,7 @@ private class Line(val value: List<Int>) {
         this.windowed(2).all { abs(it[0] - it[1]) in 1..3 }
 
     companion object {
-        operator fun invoke(value: String): Line = Line(value.split(" ").map { it.toInt() })
+        operator fun invoke(value: String): Line = Line(value.extractNumbers())
     }
 
 }

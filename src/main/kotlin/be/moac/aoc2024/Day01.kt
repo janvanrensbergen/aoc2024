@@ -1,5 +1,6 @@
 package be.moac.aoc2024
 
+import kotlin.math.abs
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
@@ -13,9 +14,7 @@ fun main() {
 object Day01 {
 
     infix fun partOne(input: List<String>): Long =
-        input.parse().sumOf {
-            if(it.second > it.first) it.second - it.first else it.first - it.second
-        }
+        input.parse().sumOf { abs(it.second - it.first) }
 
     infix fun partTwo(input: List<String>): Long {
         val (first, second) = input.parse().unzip()
@@ -23,14 +22,9 @@ object Day01 {
     }
 
     private fun List<String>.parse(): List<Pair<Long, Long>> =
-        this.filterNot { it.isBlank() }
-        .map { line ->
-            val split = line.split("   ")
-            split[0].toLong() to split[1].toLong()
-        }
-        .fold(listOf<Long>() to listOf<Long>()) { acc, current ->
-            (acc.first + current.first).sorted() to (acc.second + current.second).sorted()
-        }.let { it.first.zip(it.second) }
+        this.map { line -> line.extractNumbers<Long>().let { it.first() to it.last() } }
+            .fold(listOf<Long>() to listOf<Long>()) { acc, current -> (acc.first + current.first).sorted() to (acc.second + current.second).sorted() }
+            .let { it.first.zip(it.second) }
 
 
 }
