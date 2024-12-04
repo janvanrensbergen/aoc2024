@@ -21,7 +21,8 @@ object Day04 {
         }
 
 
-    infix fun partTwo(input: List<String>): Long = 0L
+    infix fun partTwo(input: List<String>): Long =
+        input.parse().let { matrix -> matrix.findAllAPoints().count { matrix.xmasCross(it) }.toLong() }
 
     private val checks: List<Array<CharArray>.(point: Point) -> Boolean> = listOf(
         { point -> horizontal(point) },
@@ -47,6 +48,11 @@ object Day04 {
         (point.row + 3 < size && point.col - 3 >= 0) &&
                 (0 .. 3).map { idx -> this[point.row + idx][point.col - idx]}.isXmas()
 
+    private fun Array<CharArray>.xmasCross(middle: Point): Boolean =
+        (middle.row - 1 >= 0 && middle.row + 1 < size) && (middle.col - 1 >= 0 && middle.col + 1 < this[middle.row].size) &&
+                "${this[middle.row - 1][middle.col - 1]}${this[middle.row][middle.col]}${this[middle.row + 1][middle.col + 1]}".let { it == "MAS" || it == "SAM" } &&
+                "${this[middle.row + 1][middle.col - 1]}${this[middle.row][middle.col]}${this[middle.row - 1][middle.col + 1]}".let { it == "MAS" || it == "SAM" }
+
     private fun List<String>.parse() =
         this.map { it.toCharArray() }.toTypedArray()
 
@@ -55,6 +61,10 @@ object Day04 {
         this.joinToString(separator = "").let { it == "XMAS" || it == "SAMX" }
 
 
+    private fun Array<CharArray>.findAllAPoints(): List<Point> =
+        flatMapIndexed { rowIdx, row -> row.mapIndexed { colIdx, value -> if(value == 'A') Point(rowIdx, colIdx) else null }.filterNotNull() }
+
 }
 
-data class Point(val row: Int, val col: Int)
+private data class Point(val row: Int, val col: Int)
+
