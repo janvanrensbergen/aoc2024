@@ -1,6 +1,5 @@
 package be.moac.aoc2024
 
-import be.moac.aoc2024.Day05.parsePages
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
