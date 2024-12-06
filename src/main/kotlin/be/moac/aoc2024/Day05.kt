@@ -1,5 +1,6 @@
 package be.moac.aoc2024
 
+import be.moac.aoc2024.Day05.parsePages
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
@@ -19,7 +20,13 @@ object Day05 {
                 .sumOf { it.middle() }
         }
 
-    infix fun partTwo(input: List<String>): Long = 0L
+    infix fun partTwo(input: List<String>): Int =
+        with(input.parseRules()) {
+            input.parsePages()
+                .filterNot { it.isValid(this) }
+                .map { it.sorted(this) }
+                .sumOf { it.middle() }
+        }
 
 
     private fun List<String>.parseRules(): Rules =
@@ -42,7 +49,7 @@ private data class Rules(private val rules: List<Rule>) {
     fun isValid(value: List<Pair<Int, Int>>): Boolean =
         value.all { findRulesFor(it).all { rule -> rule.isValid(it) } }
 
-    private fun findRulesFor(value: Pair<Int, Int>): List<Rule> =
+    fun findRulesFor(value: Pair<Int, Int>): List<Rule> =
         rules.filter {
             (it.first == value.first || it.first == value.second)
                     && (it.second == value.first || it.second == value.second)
@@ -55,6 +62,16 @@ private data class Rule(val first: Int, val second: Int) {
 }
 
 private data class Pages(private val numbers: List<Int>) {
+
+    fun sorted(rules: Rules): Pages = Pages(numbers.sortedWith { left, right ->
+        rules.findRulesFor(left to right).firstOrNull()?.let {
+            when {
+                left == it.first && right == it.second -> -1
+                left == it.second && right == it.first -> 1
+                else -> 0
+            }
+        } ?: 0
+    })
 
     fun middle(): Int = (numbers.size / 2).let { numbers[it] }
 
